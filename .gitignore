@@ -1,4 +1,3 @@
-<<<<<<< HEAD:.gitignore
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -30,5 +29,3 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-=======
->>>>>>> parent of b36d889 (Updated .gitignore):.gitignore.txt
