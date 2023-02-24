@@ -12,5 +12,9 @@ public class PlayerVisuals : MonoBehaviour
 	[SerializeField] private ParticleSystem playerMovementParticles;
 	public ParticleSystem PlayerMovementParticles { get => playerSwitchParticles; }
 
+    // Selected
+    [SerializeField] private ParticleSystem playerSelectedParticles;
+    public ParticleSystem PlayerSelectedParticles { get => playerSelectedParticles; }
+
 
 }

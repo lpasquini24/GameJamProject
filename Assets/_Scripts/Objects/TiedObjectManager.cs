@@ -1,56 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class TiedObjectManager : MonoBehaviour
 {
 	[SerializeField] private UnityEvent TiedObjectEvent;
 
-	//[Title("Movement")]
+	[Header("Movement")]
 	[SerializeField, Tooltip("The number of times this object will trigger events")] private int numberOfTriggers = 1;
 
 	[SerializeField] private bool movementIsDirectional = false;
-	//[ShowIf("@movementIsDirectional")]
-	[SerializeField] private float directionalMovementAmount;
-	//[HideIf("@movementIsDirectional")]
-	[SerializeField] private Vector3 exactMovementAmount;
-	[SerializeField] private float movementSpeed = 1;
 
+	[Header("Directional")]
+	[SerializeField] private float directionalMovementAmount;
+
+    [Header("Exact")]
+    [SerializeField] private Vector3 exactMovementAmount;
+	[SerializeField] private float movementSpeed = 1;
 
 	private Vector3 locationToMoveTo;
 	private Vector3 directionalVector;
-	private bool triggerMovement = false;
 	private int triggerCounter = 1;
 
-	private void OnCollisionEnter2D(Collision2D collision)
-	{
-		directionalVector = GetDirectionOnContact(collision.gameObject);
-		TriggerTiedObjectEvent();
-	}
+    private void Start() => locationToMoveTo = transform.position;
 
-	public Vector2 GetDirectionOnContact(GameObject collision)
+    public void TouchingPlayer(Collision2D _collision)
 	{
-		Vector3 _direction = (collision.transform.position - transform.position).normalized;
+		if (!_collision.gameObject.CompareTag("Player")) return;
+
+		directionalVector = GetDirectionOnContact(_collision.relativeVelocity);
+		TriggerTiedObjectEvent();
+    }
+
+	public Vector2 GetDirectionOnContact(Vector2 _direction)
+	{
 		Vector3 _fourDirectionalVector;
 
-		if (_direction.x > 0) _fourDirectionalVector = new Vector2(1, _direction.y);
-		else _fourDirectionalVector = new Vector2(-1, _direction.y);
+		bool _movingHorizontal = Mathf.Abs(_direction.x) > Mathf.Abs(_direction.y);
 
-		if (_direction.y > 0) _fourDirectionalVector = new Vector2(_fourDirectionalVector.x, 1);
-		else _fourDirectionalVector = new Vector2(_fourDirectionalVector.x, -1);
+        if (_movingHorizontal)
+			_fourDirectionalVector = _direction.x > 0 ? Vector2.right : Vector2.left;
 
-		return _fourDirectionalVector;
+        else 
+			_fourDirectionalVector = _direction.y > 0 ? Vector2.up : Vector2.down; 
+
+        return _fourDirectionalVector;
 	}
 
 	public void TriggerTiedObjectEvent()
 	{
-		if(triggerCounter > numberOfTriggers) return;
-
-		triggerMovement = true;
+		if (triggerCounter > numberOfTriggers)
+		{
+			var rbs = GetComponentsInChildren<Rigidbody2D>();
+			Array.ForEach(rbs, rb => rb.bodyType = RigidbodyType2D.Static); 
+			return;
+		}
 
 		if(movementIsDirectional)
 			locationToMoveTo = (directionalMovementAmount * directionalVector) + transform.position;
+
 		else
 			locationToMoveTo = transform.position + exactMovementAmount;
 
@@ -61,7 +72,8 @@ public class TiedObjectManager : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (triggerMovement)
-			transform.position = Vector2.Lerp(transform.position, locationToMoveTo, movementSpeed);
-	}
+		Vector3 _nextPosition = Vector2.Lerp(transform.position, locationToMoveTo, movementSpeed);
+        transform.position = _nextPosition;
+
+    }
 }

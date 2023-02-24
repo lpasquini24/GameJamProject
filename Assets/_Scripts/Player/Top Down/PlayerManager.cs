@@ -17,14 +17,15 @@ public class PlayerManager : MonoBehaviour
 
 	// Getters
 	public TopDownMovement SelectedPlayer { get => selectedPlayer; }
+    public TopDownMovement[] Players { get => players; }
 
 
-	// Startup
-	// ----------------
-	private void Start()
+    // Startup
+    // ----------------
+    private void Start()
 	{
-		players = GetComponentsInChildren<TopDownMovement>();
-		selectedPlayer = players[0];
+        players = GetComponentsInChildren<TopDownMovement>();
+		selectedPlayer = Players[0];
 	}
 
 
@@ -44,10 +45,10 @@ public class PlayerManager : MonoBehaviour
 	{
 		selectedPlayer.StopMovement();
 
-		bool _canGoNextPlayer = selectedPlayerCount < players.Length - 1;
+		bool _canGoNextPlayer = selectedPlayerCount < Players.Length - 1;
 		
 		selectedPlayerCount = _canGoNextPlayer ? selectedPlayerCount + 1 : 0;
-		selectedPlayer = players[selectedPlayerCount];
+		selectedPlayer = Players[selectedPlayerCount];
 
 		SwitchPlayer?.Invoke();
 	}

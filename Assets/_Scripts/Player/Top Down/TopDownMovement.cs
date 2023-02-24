@@ -11,7 +11,7 @@ public class TopDownMovement : MonoBehaviour
 	//[Title("Movement")]
 	[SerializeField] public float maxSpeed = 5;
 	[SerializeField] public float speedMultiplier = 1;
-	[SerializeField] public float slipperyness = 0.9f;
+	[SerializeField, Range(0, 1)] public float slipperyness = 0.9f;
 	[SerializeField] public float deceleration = 0;
 
 	private void Awake() => rb = GetComponent<Rigidbody2D>();
