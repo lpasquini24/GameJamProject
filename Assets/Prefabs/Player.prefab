@@ -150,8 +150,8 @@ MonoBehaviour:
   acceleration: 4
   deccelerationConstant: 0.8
   jumpHeight: 10
-  coyoteTime: 0.2
-  jumpQueueTime: 0.2
+  coyoteTime: 0.1
+  jumpQueueTime: 0.1
   groundMask:
     serializedVersion: 2
     m_Bits: 192
