@@ -72,18 +72,17 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		jumpQueue += Time.deltaTime;
+        if (coyoteTimer < coyoteTime && jumpQueue < jumpQueueTime)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            jumpQueue = -0.2f;
+        }
 
-	}
+    }
 
 	public void Jump()
     {
 		jumpQueue = 0;
-		if (coyoteTimer < coyoteTime && jumpQueue < jumpQueueTime)
-		{
-			rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
-			jumpQueue = -0.2f;
-		}
-
 	}
 
     public void SetDirection(Vector2 direction)
